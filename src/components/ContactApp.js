@@ -6,6 +6,7 @@ import AddPage from "../pages/AddPage";
 import RegisterPage from "../pages/RegisterPage";
 import LoginPage from "../pages/LoginPage";
 import { getUserLogged, putAccessToken } from "../utils/api";
+import { LocaleProvider } from "../contexts/LocaleContext";
 
 class ContactApp extends React.Component {
   constructor(props) {
@@ -14,6 +15,21 @@ class ContactApp extends React.Component {
     this.state = {
       authedUser: null,
       initializing: true,
+      localeContext: {
+        locale: localStorage.getItem('locale') || 'id',
+        toggleLocale: () => {
+          this.setState((prevState) => {
+            const newLocale = prevState.localeContext.locale === 'id' ? 'en' : 'id';
+            localStorage.setItem('locale', newLocale);
+            return {
+              localeContext: {
+                ...prevState.localeContext,
+                locale: newLocale
+              }
+            }
+          })
+        }
+      }
     };
 
     this.onLoginSuccess = this.onLoginSuccess.bind(this);
@@ -59,9 +75,10 @@ class ContactApp extends React.Component {
 
     if (this.state.authedUser === null) {
       return (
+        <LocaleProvider>
         <div className="contact-app">
           <header className="contact-app__header">
-            <h1>Aplikasi Kontak</h1>
+            <h1>{this.state.localeContext.locale === 'id' ? 'Aplikasi Kontak' : 'Contacts App'}</h1>
           </header>
           <main>
             <Routes>
@@ -70,11 +87,12 @@ class ContactApp extends React.Component {
             </Routes>
           </main>
         </div>
+        </LocaleProvider>
       );
     }
 
     return (
-      <>
+      <LocaleProvider value={this.state.localeContext}>
         <div className="contact-app">
           <header className="contact-app__header">
             <h1>Aplikasi Kontak</h1>
@@ -87,7 +105,7 @@ class ContactApp extends React.Component {
             </Routes>
           </main>
         </div>
-      </>
+      </LocaleProvider>
     );
   }
 }
