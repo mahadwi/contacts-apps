@@ -75,7 +75,7 @@ class ContactApp extends React.Component {
 
     if (this.state.authedUser === null) {
       return (
-        <LocaleProvider>
+        <LocaleProvider value={this.state.localeContext}>
         <div className="contact-app">
           <header className="contact-app__header">
             <h1>{this.state.localeContext.locale === 'id' ? 'Aplikasi Kontak' : 'Contacts App'}</h1>

@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 let contacts = [
     {
       id: 1,
@@ -30,5 +32,11 @@ let contacts = [
   function deleteContact(id) {
     contacts = contacts.filter((contact) => contact.id !== id);
   }
+
+  function useInput(defaultValue){
+    const [value, setValue] = useState(defaultValue);
+    const handleValueChange = (event) => setValue(event.target.value);
+    return [value, handleValueChange];
+  }
    
-  export { getContacts, addContact, deleteContact };
+  export { getContacts, addContact, deleteContact, useInput };
